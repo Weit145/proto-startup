@@ -1,0 +1,14 @@
+syntax = "proto3";
+package auth;
+
+option go_package = "github.com/Weit145/proto-startup/auth;auth";
+
+message Health {
+    bool health = 1;
+}
+
+message Empty{}
+
+service Auth {
+    rpc CheckHealth(Empty) returns (Health);
+}

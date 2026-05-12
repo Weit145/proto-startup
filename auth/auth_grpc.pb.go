@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Auth_CheckHealth_FullMethodName = "/auth.Auth/CheckHealth"
+	Auth_Register_FullMethodName    = "/auth.Auth/Register"
 )
 
 // AuthClient is the client API for Auth service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
 	CheckHealth(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Health, error)
+	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 }
 
 type authClient struct {
@@ -47,11 +49,22 @@ func (c *authClient) CheckHealth(ctx context.Context, in *Empty, opts ...grpc.Ca
 	return out, nil
 }
 
+func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*AuthResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AuthResponse)
+	err := c.cc.Invoke(ctx, Auth_Register_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServer is the server API for Auth service.
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility.
 type AuthServer interface {
 	CheckHealth(context.Context, *Empty) (*Health, error)
+	Register(context.Context, *RegisterRequest) (*AuthResponse, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedAuthServer struct{}
 
 func (UnimplementedAuthServer) CheckHealth(context.Context, *Empty) (*Health, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckHealth not implemented")
+}
+func (UnimplementedAuthServer) Register(context.Context, *RegisterRequest) (*AuthResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Register not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 func (UnimplementedAuthServer) testEmbeddedByValue()              {}
@@ -104,6 +120,24 @@ func _Auth_CheckHealth_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Auth_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).Register(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Auth_Register_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).Register(ctx, req.(*RegisterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Auth_ServiceDesc is the grpc.ServiceDesc for Auth service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckHealth",
 			Handler:    _Auth_CheckHealth_Handler,
+		},
+		{
+			MethodName: "Register",
+			Handler:    _Auth_Register_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

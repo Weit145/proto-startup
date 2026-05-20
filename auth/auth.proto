@@ -22,6 +22,13 @@ message RegisterRequest {
   string name = 3;
 }
 
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+
 message AuthResponse {
   string access_token = 1;
   string refresh_token = 2;
@@ -31,4 +38,5 @@ message AuthResponse {
 service Auth {
     rpc CheckHealth(Empty) returns (Health);
     rpc Register(RegisterRequest) returns (AuthResponse);
+    rpc Login(LoginRequest) returns (AuthResponse);
 }

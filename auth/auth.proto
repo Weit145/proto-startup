@@ -1,7 +1,7 @@
 syntax = "proto3";
 package auth;
 
-option go_package = "github.com/Weit145/proto-startup/auth;auth";
+option go_package = "github.com/weit145/proto-startup/auth;auth";
 
 message Health {
     bool health = 1;

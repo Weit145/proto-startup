@@ -369,7 +369,7 @@ const file_auth_auth_proto_rawDesc = "" +
 	"\x04Auth\x12(\n" +
 	"\vCheckHealth\x12\v.auth.Empty\x1a\f.auth.Health\x125\n" +
 	"\bRegister\x12\x15.auth.RegisterRequest\x1a\x12.auth.AuthResponse\x12/\n" +
-	"\x05Login\x12\x12.auth.LoginRequest\x1a\x12.auth.AuthResponseB,Z*github.com/Weit145/proto-startup/auth;authb\x06proto3"
+	"\x05Login\x12\x12.auth.LoginRequest\x1a\x12.auth.AuthResponseB,Z*github.com/weit145/proto-startup/auth;authb\x06proto3"
 
 var (
 	file_auth_auth_proto_rawDescOnce sync.Once

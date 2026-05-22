@@ -22,6 +22,10 @@ message RegisterRequest {
   string name = 3;
 }
 
+message ConfirmRequest{
+  string token = 1;
+}
+
 
 message LoginRequest {
   string email = 1;
@@ -37,6 +41,7 @@ message AuthResponse {
 
 service Auth {
     rpc CheckHealth(Empty) returns (Health);
-    rpc Register(RegisterRequest) returns (AuthResponse);
+    rpc Register(RegisterRequest) returns (Health);
+    rpc ConfirmEmail(ConfirmRequest) returns (AuthResponse);
     rpc Login(LoginRequest) returns (AuthResponse);
 }

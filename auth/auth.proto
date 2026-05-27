@@ -24,6 +24,7 @@ message RegisterRequest {
 
 message ConfirmRequest{
   string token = 1;
+  string userID = 2;
 }
 
 

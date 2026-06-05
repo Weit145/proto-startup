@@ -33,6 +33,12 @@ message LoginRequest {
   string password = 2;
 }
 
+message LogOutRequest {
+  string userID = 1;
+  string refresh_token = 2;
+}
+
+
 
 message AuthResponse {
   string access_token = 1;
@@ -45,4 +51,5 @@ service Auth {
     rpc Register(RegisterRequest) returns (Health);
     rpc ConfirmEmail(ConfirmRequest) returns (AuthResponse);
     rpc Login(LoginRequest) returns (AuthResponse);
+    rpc Logout(LogOutRequest) returns (Empty);
 }

@@ -38,7 +38,9 @@ message LogOutRequest {
   string refresh_token = 2;
 }
 
-
+message RefreshRequest {
+  string refresh_token = 1;
+}
 
 message AuthResponse {
   string access_token = 1;
@@ -52,4 +54,5 @@ service Auth {
     rpc ConfirmEmail(ConfirmRequest) returns (AuthResponse);
     rpc Login(LoginRequest) returns (AuthResponse);
     rpc Logout(LogOutRequest) returns (Empty);
+    rpc RefreshToken(RefreshRequest) returns (AuthResponse);
 }

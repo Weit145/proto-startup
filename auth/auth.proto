@@ -3,7 +3,7 @@ package auth;
 
 option go_package = "github.com/weit145/proto-startup/auth;auth";
 
-message Health {
+message HealthDB {
     bool health = 1;
 }
 
@@ -47,8 +47,8 @@ message AuthResponse {
 }
 
 service Auth {
-    rpc CheckHealth(Empty) returns (Health);
-    rpc Register(RegisterRequest) returns (Health);
+    rpc CheckHealth(Empty) returns (HealthDB);
+    rpc Register(RegisterRequest) returns (Empty);
     rpc ConfirmEmail(ConfirmRequest) returns (AuthResponse);
     rpc Login(LoginRequest) returns (AuthResponse);
     rpc Logout(LogOutRequest) returns (Empty);

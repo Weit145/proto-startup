@@ -30,8 +30,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
-	CheckHealth(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Health, error)
-	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*Health, error)
+	CheckHealth(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*HealthDB, error)
+	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*Empty, error)
 	ConfirmEmail(ctx context.Context, in *ConfirmRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	Logout(ctx context.Context, in *LogOutRequest, opts ...grpc.CallOption) (*Empty, error)
@@ -45,9 +45,9 @@ func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 	return &authClient{cc}
 }
 
-func (c *authClient) CheckHealth(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Health, error) {
+func (c *authClient) CheckHealth(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*HealthDB, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Health)
+	out := new(HealthDB)
 	err := c.cc.Invoke(ctx, Auth_CheckHealth_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -55,9 +55,9 @@ func (c *authClient) CheckHealth(ctx context.Context, in *Empty, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*Health, error) {
+func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Health)
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, Auth_Register_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -99,8 +99,8 @@ func (c *authClient) Logout(ctx context.Context, in *LogOutRequest, opts ...grpc
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility.
 type AuthServer interface {
-	CheckHealth(context.Context, *Empty) (*Health, error)
-	Register(context.Context, *RegisterRequest) (*Health, error)
+	CheckHealth(context.Context, *Empty) (*HealthDB, error)
+	Register(context.Context, *RegisterRequest) (*Empty, error)
 	ConfirmEmail(context.Context, *ConfirmRequest) (*AuthResponse, error)
 	Login(context.Context, *LoginRequest) (*AuthResponse, error)
 	Logout(context.Context, *LogOutRequest) (*Empty, error)
@@ -114,10 +114,10 @@ type AuthServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAuthServer struct{}
 
-func (UnimplementedAuthServer) CheckHealth(context.Context, *Empty) (*Health, error) {
+func (UnimplementedAuthServer) CheckHealth(context.Context, *Empty) (*HealthDB, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckHealth not implemented")
 }
-func (UnimplementedAuthServer) Register(context.Context, *RegisterRequest) (*Health, error) {
+func (UnimplementedAuthServer) Register(context.Context, *RegisterRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Register not implemented")
 }
 func (UnimplementedAuthServer) ConfirmEmail(context.Context, *ConfirmRequest) (*AuthResponse, error) {

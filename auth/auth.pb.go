@@ -21,27 +21,27 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Health struct {
+type HealthDB struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Health        bool                   `protobuf:"varint,1,opt,name=health,proto3" json:"health,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Health) Reset() {
-	*x = Health{}
+func (x *HealthDB) Reset() {
+	*x = HealthDB{}
 	mi := &file_auth_auth_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Health) String() string {
+func (x *HealthDB) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Health) ProtoMessage() {}
+func (*HealthDB) ProtoMessage() {}
 
-func (x *Health) ProtoReflect() protoreflect.Message {
+func (x *HealthDB) ProtoReflect() protoreflect.Message {
 	mi := &file_auth_auth_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -53,12 +53,12 @@ func (x *Health) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Health.ProtoReflect.Descriptor instead.
-func (*Health) Descriptor() ([]byte, []int) {
+// Deprecated: Use HealthDB.ProtoReflect.Descriptor instead.
+func (*HealthDB) Descriptor() ([]byte, []int) {
 	return file_auth_auth_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Health) GetHealth() bool {
+func (x *HealthDB) GetHealth() bool {
 	if x != nil {
 		return x.Health
 	}
@@ -449,8 +449,8 @@ var File_auth_auth_proto protoreflect.FileDescriptor
 
 const file_auth_auth_proto_rawDesc = "" +
 	"\n" +
-	"\x0fauth/auth.proto\x12\x04auth\" \n" +
-	"\x06Health\x12\x16\n" +
+	"\x0fauth/auth.proto\x12\x04auth\"\"\n" +
+	"\bHealthDB\x12\x16\n" +
 	"\x06health\x18\x01 \x01(\bR\x06health\"\a\n" +
 	"\x05Empty\"\\\n" +
 	"\x04User\x12\x0e\n" +
@@ -475,10 +475,10 @@ const file_auth_auth_proto_rawDesc = "" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
 	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12\x1e\n" +
 	"\x04user\x18\x03 \x01(\v2\n" +
-	".auth.UserR\x04user2\xf8\x01\n" +
-	"\x04Auth\x12(\n" +
-	"\vCheckHealth\x12\v.auth.Empty\x1a\f.auth.Health\x12/\n" +
-	"\bRegister\x12\x15.auth.RegisterRequest\x1a\f.auth.Health\x128\n" +
+	".auth.UserR\x04user2\xf9\x01\n" +
+	"\x04Auth\x12*\n" +
+	"\vCheckHealth\x12\v.auth.Empty\x1a\x0e.auth.HealthDB\x12.\n" +
+	"\bRegister\x12\x15.auth.RegisterRequest\x1a\v.auth.Empty\x128\n" +
 	"\fConfirmEmail\x12\x14.auth.ConfirmRequest\x1a\x12.auth.AuthResponse\x12/\n" +
 	"\x05Login\x12\x12.auth.LoginRequest\x1a\x12.auth.AuthResponse\x12*\n" +
 	"\x06Logout\x12\x13.auth.LogOutRequest\x1a\v.auth.EmptyB,Z*github.com/weit145/proto-startup/auth;authb\x06proto3"
@@ -497,7 +497,7 @@ func file_auth_auth_proto_rawDescGZIP() []byte {
 
 var file_auth_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_auth_auth_proto_goTypes = []any{
-	(*Health)(nil),          // 0: auth.Health
+	(*HealthDB)(nil),        // 0: auth.HealthDB
 	(*Empty)(nil),           // 1: auth.Empty
 	(*User)(nil),            // 2: auth.User
 	(*RegisterRequest)(nil), // 3: auth.RegisterRequest
@@ -513,8 +513,8 @@ var file_auth_auth_proto_depIdxs = []int32{
 	4, // 3: auth.Auth.ConfirmEmail:input_type -> auth.ConfirmRequest
 	5, // 4: auth.Auth.Login:input_type -> auth.LoginRequest
 	6, // 5: auth.Auth.Logout:input_type -> auth.LogOutRequest
-	0, // 6: auth.Auth.CheckHealth:output_type -> auth.Health
-	0, // 7: auth.Auth.Register:output_type -> auth.Health
+	0, // 6: auth.Auth.CheckHealth:output_type -> auth.HealthDB
+	1, // 7: auth.Auth.Register:output_type -> auth.Empty
 	7, // 8: auth.Auth.ConfirmEmail:output_type -> auth.AuthResponse
 	7, // 9: auth.Auth.Login:output_type -> auth.AuthResponse
 	1, // 10: auth.Auth.Logout:output_type -> auth.Empty

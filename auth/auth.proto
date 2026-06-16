@@ -52,6 +52,12 @@ message PasswordConfirmRequest{
   string new_password= 3;
 }
 
+message ChangePasswordRequest{
+  string userID = 1;
+  string new_password= 2;
+  string old_password= 3;
+}
+
 message AuthResponse {
   string access_token = 1;
   string refresh_token = 2;
@@ -68,4 +74,5 @@ service Auth {
     rpc RefreshToken(RefreshRequest) returns (AuthResponse);
     rpc PasswordRequest (Email) returns (Empty);
     rpc PasswordConfirm (PasswordConfirmRequest) returns (Empty);
+    rpc ChangePassword (ChangePasswordRequest) returns (Empty);
 }

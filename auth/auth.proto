@@ -7,6 +7,10 @@ message HealthDB {
     bool health = 1;
 }
 
+message Email {
+  string email = 1;
+}
+
 message Empty{}
 
 message User {
@@ -42,6 +46,12 @@ message RefreshRequest {
   string refresh_token = 1;
 }
 
+message PasswordConfirmRequest{
+  string token = 1;
+  string userID = 2;
+  string new_password= 3;
+}
+
 message AuthResponse {
   string access_token = 1;
   string refresh_token = 2;
@@ -51,8 +61,11 @@ message AuthResponse {
 service Auth {
     rpc CheckHealth(Empty) returns (HealthDB);
     rpc Register(RegisterRequest) returns (Empty);
+    rpc RepeatEmail(Email) returns (Empty);
     rpc ConfirmEmail(ConfirmRequest) returns (AuthResponse);
     rpc Login(LoginRequest) returns (AuthResponse);
     rpc Logout(LogOutRequest) returns (Empty);
     rpc RefreshToken(RefreshRequest) returns (AuthResponse);
+    rpc PasswordRequest (Email) returns (Empty);
+    rpc PasswordConfirm (PasswordConfirmRequest) returns (Empty);
 }

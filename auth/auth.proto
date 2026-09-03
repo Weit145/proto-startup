@@ -22,8 +22,6 @@ message User {
 
 message RegisterRequest {
   string email = 1;
-  string password = 2;
-  string name = 3;
 }
 
 message ConfirmRequest{
@@ -31,6 +29,10 @@ message ConfirmRequest{
   string userID = 2;
 }
 
+message RegisterCompleteRequest {
+  string password = 1;
+  string session = 2;
+}
 
 message LoginRequest {
   string email = 1;
@@ -58,6 +60,10 @@ message ChangePasswordRequest{
   string old_password= 3;
 }
 
+message ConfirmResponse{
+  string access_token = 1;
+}
+
 message AuthResponse {
   string access_token = 1;
   string refresh_token = 2;
@@ -67,8 +73,9 @@ message AuthResponse {
 service Auth {
     rpc CheckHealth(Empty) returns (HealthDB);
     rpc Register(RegisterRequest) returns (Empty);
+    rpc ConfirmEmail(ConfirmRequest) returns (ConfirmResponse);
+    rpc RegisterComplete(RegisterCompleteRequest) returns (AuthResponse);
     rpc RepeatEmail(Email) returns (Empty);
-    rpc ConfirmEmail(ConfirmRequest) returns (AuthResponse);
     rpc Login(LoginRequest) returns (AuthResponse);
     rpc Logout(LogOutRequest) returns (Empty);
     rpc RefreshToken(RefreshRequest) returns (AuthResponse);

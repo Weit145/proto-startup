@@ -19,16 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Auth_CheckHealth_FullMethodName     = "/auth.Auth/CheckHealth"
-	Auth_Register_FullMethodName        = "/auth.Auth/Register"
-	Auth_RepeatEmail_FullMethodName     = "/auth.Auth/RepeatEmail"
-	Auth_ConfirmEmail_FullMethodName    = "/auth.Auth/ConfirmEmail"
-	Auth_Login_FullMethodName           = "/auth.Auth/Login"
-	Auth_Logout_FullMethodName          = "/auth.Auth/Logout"
-	Auth_RefreshToken_FullMethodName    = "/auth.Auth/RefreshToken"
-	Auth_PasswordRequest_FullMethodName = "/auth.Auth/PasswordRequest"
-	Auth_PasswordConfirm_FullMethodName = "/auth.Auth/PasswordConfirm"
-	Auth_ChangePassword_FullMethodName  = "/auth.Auth/ChangePassword"
+	Auth_CheckHealth_FullMethodName      = "/auth.Auth/CheckHealth"
+	Auth_Register_FullMethodName         = "/auth.Auth/Register"
+	Auth_ConfirmEmail_FullMethodName     = "/auth.Auth/ConfirmEmail"
+	Auth_RegisterComplete_FullMethodName = "/auth.Auth/RegisterComplete"
+	Auth_RepeatEmail_FullMethodName      = "/auth.Auth/RepeatEmail"
+	Auth_Login_FullMethodName            = "/auth.Auth/Login"
+	Auth_Logout_FullMethodName           = "/auth.Auth/Logout"
+	Auth_RefreshToken_FullMethodName     = "/auth.Auth/RefreshToken"
+	Auth_PasswordRequest_FullMethodName  = "/auth.Auth/PasswordRequest"
+	Auth_PasswordConfirm_FullMethodName  = "/auth.Auth/PasswordConfirm"
+	Auth_ChangePassword_FullMethodName   = "/auth.Auth/ChangePassword"
 )
 
 // AuthClient is the client API for Auth service.
@@ -37,8 +38,9 @@ const (
 type AuthClient interface {
 	CheckHealth(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*HealthDB, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*Empty, error)
+	ConfirmEmail(ctx context.Context, in *ConfirmRequest, opts ...grpc.CallOption) (*ConfirmResponse, error)
+	RegisterComplete(ctx context.Context, in *RegisterCompleteRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	RepeatEmail(ctx context.Context, in *Email, opts ...grpc.CallOption) (*Empty, error)
-	ConfirmEmail(ctx context.Context, in *ConfirmRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	Logout(ctx context.Context, in *LogOutRequest, opts ...grpc.CallOption) (*Empty, error)
 	RefreshToken(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*AuthResponse, error)
@@ -75,20 +77,30 @@ func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...
 	return out, nil
 }
 
-func (c *authClient) RepeatEmail(ctx context.Context, in *Email, opts ...grpc.CallOption) (*Empty, error) {
+func (c *authClient) ConfirmEmail(ctx context.Context, in *ConfirmRequest, opts ...grpc.CallOption) (*ConfirmResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Empty)
-	err := c.cc.Invoke(ctx, Auth_RepeatEmail_FullMethodName, in, out, cOpts...)
+	out := new(ConfirmResponse)
+	err := c.cc.Invoke(ctx, Auth_ConfirmEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authClient) ConfirmEmail(ctx context.Context, in *ConfirmRequest, opts ...grpc.CallOption) (*AuthResponse, error) {
+func (c *authClient) RegisterComplete(ctx context.Context, in *RegisterCompleteRequest, opts ...grpc.CallOption) (*AuthResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AuthResponse)
-	err := c.cc.Invoke(ctx, Auth_ConfirmEmail_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Auth_RegisterComplete_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) RepeatEmail(ctx context.Context, in *Email, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Auth_RepeatEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +173,9 @@ func (c *authClient) ChangePassword(ctx context.Context, in *ChangePasswordReque
 type AuthServer interface {
 	CheckHealth(context.Context, *Empty) (*HealthDB, error)
 	Register(context.Context, *RegisterRequest) (*Empty, error)
+	ConfirmEmail(context.Context, *ConfirmRequest) (*ConfirmResponse, error)
+	RegisterComplete(context.Context, *RegisterCompleteRequest) (*AuthResponse, error)
 	RepeatEmail(context.Context, *Email) (*Empty, error)
-	ConfirmEmail(context.Context, *ConfirmRequest) (*AuthResponse, error)
 	Login(context.Context, *LoginRequest) (*AuthResponse, error)
 	Logout(context.Context, *LogOutRequest) (*Empty, error)
 	RefreshToken(context.Context, *RefreshRequest) (*AuthResponse, error)
@@ -185,11 +198,14 @@ func (UnimplementedAuthServer) CheckHealth(context.Context, *Empty) (*HealthDB, 
 func (UnimplementedAuthServer) Register(context.Context, *RegisterRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Register not implemented")
 }
+func (UnimplementedAuthServer) ConfirmEmail(context.Context, *ConfirmRequest) (*ConfirmResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ConfirmEmail not implemented")
+}
+func (UnimplementedAuthServer) RegisterComplete(context.Context, *RegisterCompleteRequest) (*AuthResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RegisterComplete not implemented")
+}
 func (UnimplementedAuthServer) RepeatEmail(context.Context, *Email) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method RepeatEmail not implemented")
-}
-func (UnimplementedAuthServer) ConfirmEmail(context.Context, *ConfirmRequest) (*AuthResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ConfirmEmail not implemented")
 }
 func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*AuthResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Login not implemented")
@@ -266,24 +282,6 @@ func _Auth_Register_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Auth_RepeatEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Email)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServer).RepeatEmail(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Auth_RepeatEmail_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).RepeatEmail(ctx, req.(*Email))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Auth_ConfirmEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ConfirmRequest)
 	if err := dec(in); err != nil {
@@ -298,6 +296,42 @@ func _Auth_ConfirmEmail_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServer).ConfirmEmail(ctx, req.(*ConfirmRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Auth_RegisterComplete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterCompleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).RegisterComplete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Auth_RegisterComplete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).RegisterComplete(ctx, req.(*RegisterCompleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Auth_RepeatEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Email)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).RepeatEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Auth_RepeatEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).RepeatEmail(ctx, req.(*Email))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -426,12 +460,16 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Auth_Register_Handler,
 		},
 		{
-			MethodName: "RepeatEmail",
-			Handler:    _Auth_RepeatEmail_Handler,
-		},
-		{
 			MethodName: "ConfirmEmail",
 			Handler:    _Auth_ConfirmEmail_Handler,
+		},
+		{
+			MethodName: "RegisterComplete",
+			Handler:    _Auth_RegisterComplete_Handler,
+		},
+		{
+			MethodName: "RepeatEmail",
+			Handler:    _Auth_RepeatEmail_Handler,
 		},
 		{
 			MethodName: "Login",

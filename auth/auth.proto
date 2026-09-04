@@ -16,7 +16,6 @@ message Empty{}
 message User {
   string id = 1;
   string email = 2;
-  string username = 3;
   string role = 4;
 }
 
